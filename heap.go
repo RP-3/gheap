@@ -4,17 +4,17 @@ import (
 	"math"
 )
 
-// Heapable defines the properties than any item must have
+// Orderable defines the properties than any item must have
 // to be heap-ordered.
-type Heapable interface {
-	// Order dictates the internal ordering of
-	// the items in the heap. Heap is min-ordered.
+type Orderable interface {
+	// Order dictates the internal ordering of the items in the heap. Heap is
+	// min-ordered, so lowest-order items have the highest priority
 	Order() int
 }
 
 // Heap is a priority queue (min-heap)
 type Heap struct {
-	storage []Heapable
+	storage []Orderable
 	maxSize int
 }
 
@@ -28,8 +28,8 @@ func NewHeap(maxSize int) *Heap {
 }
 
 // Heapify returns a Heap of the specified size using the given
-// source slice as its backing storage, and heap-sorts it in < O(n) time.
-func Heapify(source []Heapable, maxSize int) *Heap {
+// source slice as its backing storage, and heap-sorts it in <= O(n) time.
+func Heapify(source []Orderable, maxSize int) *Heap {
 	result := &Heap{storage: source, maxSize: maxSize}
 	result.heapify()
 	return result
@@ -39,7 +39,7 @@ func Heapify(source []Heapable, maxSize int) *Heap {
 // The second return val, if true, indicates that the heap is at its
 // maximum capacity the highest priority item was popped and returned
 // to you as the first return val
-func (h *Heap) Push(val Heapable) (Heapable, bool) {
+func (h *Heap) Push(val Orderable) (Orderable, bool) {
 	h.storage = append(h.storage, val)
 	h.percolateUp(len(h.storage) - 1)
 	if len(h.storage) > h.maxSize {
@@ -49,9 +49,9 @@ func (h *Heap) Push(val Heapable) (Heapable, bool) {
 }
 
 // UnsafeStorage yields a shallow copy of the underlying storage of the heap.
-// The behaviour following the mutation of the result is undefined
-func (h *Heap) UnsafeStorage() []Heapable {
-	result := make([]Heapable, 0, len(h.storage))
+// The behaviour following mutation of the copy or its pointers is undefined
+func (h *Heap) UnsafeStorage() []Orderable {
+	result := make([]Orderable, 0, len(h.storage))
 	copy(result, h.storage)
 	return result
 }
@@ -59,7 +59,7 @@ func (h *Heap) UnsafeStorage() []Heapable {
 // Pop removes the highest priority item from the heap.
 // The second return val, if false, indicates that the heap is empty
 // and that a nil value was returned to you as the first return val
-func (h *Heap) Pop() (Heapable, bool) {
+func (h *Heap) Pop() (Orderable, bool) {
 	switch len(h.storage) {
 	case 0:
 		return nil, false
@@ -77,7 +77,7 @@ func (h *Heap) Pop() (Heapable, bool) {
 // dequeuing it.
 // The second return val, if false, indicates that the heap is empty
 // and that a nil value was returned to you as the first return val
-func (h *Heap) Peak() (Heapable, bool) {
+func (h *Heap) Peak() (Orderable, bool) {
 	if len(h.storage) > 0 {
 		return h.storage[0], true
 	}
@@ -89,7 +89,7 @@ func (h *Heap) Size() int {
 	return len(h.storage)
 }
 
-func (h *Heap) removeLast() Heapable {
+func (h *Heap) removeLast() Orderable {
 	result := h.storage[len(h.storage)-1]
 	h.storage = h.storage[:len(h.storage)-1]
 	return result
