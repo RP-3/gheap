@@ -1,4 +1,4 @@
-module gheap
+module github.com/rp-3/gheap
 
 go 1.15
 

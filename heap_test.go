@@ -1,9 +1,10 @@
 package gheap_test
 
 import (
-	"gheap"
 	"math"
 	"math/rand"
+
+	"github.com/rp-3/gheap"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
