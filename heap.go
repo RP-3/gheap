@@ -3,7 +3,7 @@ package gheap
 const maxUint = ^uint(0)
 const maxInt = int(maxUint >> 1)
 
-// Orderable defines the properties than any item must have
+// Orderable defines the properties that any item must have
 // to be heap-ordered.
 type Orderable interface {
 	// Order dictates the internal ordering of the items in the heap. Heap is
@@ -17,10 +17,10 @@ type Heap struct {
 	maxSize int
 }
 
-// NewHeap returns a Heap of the specified size. If size < 0
+// NewHeap returns a Heap of the specified size. If size <= 0
 // heap size is unbounded.
 func NewHeap(maxSize int) *Heap {
-	if maxSize < 0 {
+	if maxSize <= 0 {
 		return &Heap{maxSize: maxInt}
 	}
 	return &Heap{maxSize: maxSize}
