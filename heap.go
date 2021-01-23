@@ -1,8 +1,7 @@
 package gheap
 
-import (
-	"math"
-)
+const maxUint = ^uint(0)
+const maxInt = int(maxUint >> 1)
 
 // Orderable defines the properties than any item must have
 // to be heap-ordered.
@@ -22,7 +21,7 @@ type Heap struct {
 // heap size is unbounded.
 func NewHeap(maxSize int) *Heap {
 	if maxSize < 0 {
-		return &Heap{maxSize: math.MaxInt64}
+		return &Heap{maxSize: maxInt}
 	}
 	return &Heap{maxSize: maxSize}
 }
